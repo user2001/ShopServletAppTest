@@ -68,13 +68,13 @@ public class ShopController {
     }
 
 
-    @GetMapping( "/shops/{shopId}")
+    @GetMapping( "/{shopId}")
     public Shop getShop(@PathVariable Long shopId) {
         return shopService.getShop(shopId);
     }
 
 
-    @PutMapping(value = "/shops/{shopId}",
+    @PutMapping(value = "/{shopId}",
            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Shop updateShop(@PathVariable Long shopId, @RequestBody Shop shopDto) {
@@ -82,7 +82,7 @@ public class ShopController {
         return temp;
     }
 
-    @DeleteMapping("/shops/{shopId}")
+    @DeleteMapping("/{shopId}")
     public String deleteShops(@PathVariable Long shopId) {
         shopService.deleteShop(shopId);
         return "Shop with id: " + shopId + " was deleted";

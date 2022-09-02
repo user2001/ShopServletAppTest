@@ -5,22 +5,19 @@ import com.example.shopservletapp.dto.ShopDto;
 import com.example.shopservletapp.entity.Shop;
 import com.example.shopservletapp.excption.ShopNotFoundException;
 import com.example.shopservletapp.repository.ShopRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
+
+@RequiredArgsConstructor
 @Service
 public class ShopServiceImpl implements ShopService {
 
-    private ShopRepository shopRepository;
-
-    public ShopServiceImpl(ShopRepository shopRepository) {
-        this.shopRepository = shopRepository;
-    }
+    private final ShopRepository shopRepository;
 
     @PostConstruct
     void init() {
@@ -69,8 +66,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public Shop getShop(Long shopId) {
         isFound(shopId);
-        Shop shop = shopRepository.findById(shopId).orElse(null);
-        return shop;
+        return shopRepository.findById(shopId).orElse(null);
     }
 
     @Override

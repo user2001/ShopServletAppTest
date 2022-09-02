@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -17,7 +18,6 @@ public class ShopServiceImpl implements ShopService {
 
     private ShopRepository shopRepository;
 
-    @Autowired
     public ShopServiceImpl(ShopRepository shopRepository) {
         this.shopRepository = shopRepository;
     }
@@ -44,7 +44,7 @@ public class ShopServiceImpl implements ShopService {
         return theShop;
     }
 
-    public ShopDto addShopDTO (ShopDto shopDto) {
+    public ShopDto addShopDTO(ShopDto shopDto) {
         Shop shop = convertToEntity(shopDto);
         shopRepository.save(shop);
         return shopDto;
@@ -69,25 +69,26 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public Shop getShop(Long shopId) {
         isFound(shopId);
-        Shop shop=shopRepository.findById(shopId).orElse(null);
-       return shop;
+        Shop shop = shopRepository.findById(shopId).orElse(null);
+        return shop;
     }
 
     @Override
     public Shop updateShop(Shop shop, Long shopId) {
-        var list = shopRepository.findAll();
         isFound(shopId);
-        var temp = list.get(Math.toIntExact(shopId));
+        var temp = shopRepository.findById(shopId).orElse(null);
         temp.setCity(shop.getCity());
         temp.setShopName(shop.getShopName());
         temp.setStreet(shop.getStreet());
         temp.setCountOfWorkers(shop.getCountOfWorkers());
         temp.setWebsite(shop.isWebsite());
+        shopRepository.save(temp);
         return temp;
     }
 
     public void isFound(Long shopId) {
-        if (!shopRepository.findAll().contains(shopId))
+        boolean isExist = shopRepository.existsById(shopId);
+        if (!isExist)
             throw new ShopNotFoundException(
                     "Shop with id: " + shopId + " not found, try to put correct id");
     }

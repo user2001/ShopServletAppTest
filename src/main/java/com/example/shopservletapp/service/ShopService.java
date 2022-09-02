@@ -2,6 +2,7 @@ package com.example.shopservletapp.service;
 
 import com.example.shopservletapp.entity.Shop;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface ShopService {

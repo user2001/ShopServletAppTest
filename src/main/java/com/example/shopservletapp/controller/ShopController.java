@@ -34,11 +34,14 @@ public class ShopController {
         this.shopService = shopService;
     }
 
+
+    //1. створити методи POST, GET  які приймають httpServletRequest та httpServletResponse
+    // та серіалізувати їх за допомогою Object Mapper
     @SneakyThrows
     @GetMapping
     public void getShops(HttpServletRequest request, HttpServletResponse response) {
         PrintWriter writer=response.getWriter();
-        shopService.getShops().forEach(e-> writer.println(e.toString()));
+        shopService.getShops().forEach(e->writer.println(e.toString() ));
         writer.flush();
     }
 
@@ -55,6 +58,7 @@ public class ShopController {
     }
 
 
+    //2. використати патерн DTO де приховати кількість співробітників магазину
     @SneakyThrows
     @PostMapping("/dto")
     public ShopDto addShopDTO(HttpServletRequest request, HttpServletResponse response) {
@@ -75,8 +79,7 @@ public class ShopController {
 
 
     @PutMapping(value = "/{shopId}",
-           consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public Shop updateShop(@PathVariable Long shopId, @RequestBody Shop shopDto) {
         Shop temp = shopService.updateShop(shopDto, shopId);
         return temp;

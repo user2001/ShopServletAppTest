@@ -1,10 +1,9 @@
-package com.example.shopservletapp.controller;
+package com.example.shopservletapptest.controller;
 
-import com.example.shopservletapp.dto.ShopDto;
-import com.example.shopservletapp.entity.Shop;
-import com.example.shopservletapp.excption.ShopErrorResponse;
-import com.example.shopservletapp.excption.ShopNotFoundException;
-import com.example.shopservletapp.service.ShopServiceImpl;
+import com.example.shopservletapptest.entity.Shop;
+import com.example.shopservletapptest.excption.ShopErrorResponse;
+import com.example.shopservletapptest.excption.ShopNotFoundException;
+import com.example.shopservletapptest.service.ShopServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -48,21 +47,6 @@ public class ShopController {
         shopService.addShop(shop);
         return shop;
     }
-
-
-    //2. використати патерн DTO де приховати кількість співробітників магазину
-    @SneakyThrows
-    @PostMapping("/dto")
-    public ShopDto addShopDTO(HttpServletRequest request, HttpServletResponse response) {
-        BufferedReader reader = request.getReader();
-        String shopJson = reader.lines().collect(Collectors.joining());
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        ShopDto shopDto = objectMapper.readValue(shopJson, ShopDto.class);
-        shopService.addShopDTO(shopDto);
-        return shopDto;
-    }
-
 
     @GetMapping("/{shopId}")
     public Shop getShop(@PathVariable Long shopId) {

@@ -1,4 +1,4 @@
-package com.example.shopservletapp.entity;
+package com.example.shopservletapptest.entity;
 
 
 import lombok.Getter;

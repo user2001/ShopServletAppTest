@@ -1,4 +1,4 @@
-package com.example.shopservletapp.excption;
+package com.example.shopservletapptest.excption;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,7 @@
-package com.example.shopservletapp.service;
+package com.example.shopservletapptest.service;
 
-import com.example.shopservletapp.entity.Shop;
+import com.example.shopservletapptest.entity.Shop;
 
-import java.util.HashMap;
 import java.util.List;
 
 public interface ShopService {

@@ -1,6 +1,6 @@
-package com.example.shopservletapp.repository;
+package com.example.shopservletapptest.repository;
 
-import com.example.shopservletapp.entity.Shop;
+import com.example.shopservletapptest.entity.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ShopRepository extends JpaRepository<Shop,Long> {

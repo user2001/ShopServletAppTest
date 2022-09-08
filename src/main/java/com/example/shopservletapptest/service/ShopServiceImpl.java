@@ -1,10 +1,9 @@
-package com.example.shopservletapp.service;
+package com.example.shopservletapptest.service;
 
 
-import com.example.shopservletapp.dto.ShopDto;
-import com.example.shopservletapp.entity.Shop;
-import com.example.shopservletapp.excption.ShopNotFoundException;
-import com.example.shopservletapp.repository.ShopRepository;
+import com.example.shopservletapptest.entity.Shop;
+import com.example.shopservletapptest.excption.ShopNotFoundException;
+import com.example.shopservletapptest.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,21 +38,6 @@ public class ShopServiceImpl implements ShopService {
         shopRepository.save(theShop);
         System.out.println("shop added");
         return theShop;
-    }
-
-    public ShopDto addShopDTO(ShopDto shopDto) {
-        Shop shop = convertToEntity(shopDto);
-        shopRepository.save(shop);
-        return shopDto;
-    }
-
-    private Shop convertToEntity(ShopDto shopDto) {
-        Shop shop = new Shop();
-        shop.setShopName(shopDto.getShopName());
-        shop.setCity(shopDto.getCity());
-        shop.setStreet(shopDto.getStreet());
-        shop.setWebsite(shopDto.isWebsite());
-        return shop;
     }
 
     @Override

@@ -7,8 +7,6 @@ import com.example.shopservletapptest.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -18,16 +16,6 @@ public class ShopServiceImpl implements ShopService {
 
     private final ShopRepository shopRepository;
 
-    @PostConstruct
-    void init() {
-        Shop shop1 = new Shop("Dolyna", "Prospekt Svobody", "Dynastia", 50, true);
-        Shop shop2 = new Shop("Lviv", "Lukasha", "Politech", 5000, true);
-        Shop shop3 = new Shop("Stryj", "Drohobycka", "Kavoman", 20, false);
-        Shop shop4 = new Shop("Kyiv", "Prospekt Nezaleznosti", "Svoboda", 47, false);
-        Shop shop5 = new Shop("Odessa", "Naberezna", "Arkadia", 700, true);
-        shopRepository.saveAll(Arrays.asList(shop1, shop5, shop2, shop4, shop3));
-    }
-
     @Override
     public List<Shop> getShops() {
         return shopRepository.findAll();
@@ -36,7 +24,6 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public Shop addShop(Shop theShop) {
         shopRepository.save(theShop);
-        System.out.println("shop added");
         return theShop;
     }
 

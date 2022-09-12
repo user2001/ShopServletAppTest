@@ -33,4 +33,5 @@ public class Shop {
         this.countOfWorkers = countOfWorkers;
         this.website = website;
     }
+
 }

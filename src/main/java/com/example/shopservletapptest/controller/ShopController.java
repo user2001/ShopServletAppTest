@@ -30,7 +30,7 @@ public class ShopController {
     // та серіалізувати їх за допомогою Object Mapper
     @SneakyThrows
     @GetMapping
-    public void getShops(HttpServletRequest request, HttpServletResponse response) {
+    public void getShops(HttpServletResponse response) {
         PrintWriter writer = response.getWriter();
         shopService.getShops().forEach(e -> writer.println(e.toString()));
         writer.flush();
@@ -38,7 +38,7 @@ public class ShopController {
 
     @SneakyThrows
     @PostMapping
-    public Shop addShop(HttpServletRequest request, HttpServletResponse response) {
+    public Shop addShop(HttpServletRequest request) {
         BufferedReader reader = request.getReader();
         String shopJson = reader.lines().collect(Collectors.joining());
 
@@ -56,8 +56,9 @@ public class ShopController {
 
     @PutMapping(value = "/{shopId}",
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public Shop updateShop(@PathVariable Long shopId, @RequestBody Shop shopDto) {
-        return shopService.updateShop(shopDto, shopId);
+    public Shop updateShop(@PathVariable Long shopId, @RequestBody Shop shop) {
+        Shop updated=shopService.updateShop(shop, shopId);
+        return updated;
     }
 
     @DeleteMapping("/{shopId}")

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -35,9 +36,8 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public Shop getShop(Long shopId) {
-        isFound(shopId);
-        return shopRepository.findById(shopId).orElse(null);
+    public Optional<Shop> getShop(Long shopId) {
+        return shopRepository.findById(shopId);
     }
 
     @Override

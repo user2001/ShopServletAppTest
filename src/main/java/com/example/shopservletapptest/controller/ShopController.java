@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -49,7 +50,7 @@ public class ShopController {
     }
 
     @GetMapping("/{shopId}")
-    public Shop getShop(@PathVariable Long shopId) {
+    public Optional<Shop> getShop(@PathVariable Long shopId) {
         return shopService.getShop(shopId);
     }
 

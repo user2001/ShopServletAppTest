@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.Mockito.when;
@@ -86,7 +87,7 @@ public class ShopControllerTest {
         Shop shop2 = new Shop("Lviv", "Lukasha", "Politech", 5000, true);
         shop2.setId(2L);
 
-        when(shopServiceMock.getShop(shop2.getId())).thenReturn(shop2);
+        when(shopServiceMock.getShop(shop2.getId())).thenReturn(Optional.of(shop2));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/shops/2")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -102,7 +103,7 @@ public class ShopControllerTest {
         Shop newShop = new Shop("Dolyna", "Prospekt Svobody", "Dynastia", 50, true);
         newShop.setId(1L);
 
-        when(shopServiceMock.getShop(newShop.getId())).thenReturn(newShop);
+        when(shopServiceMock.getShop(newShop.getId())).thenReturn(Optional.of(newShop));
 
         mockMvc.perform(delete("/shops/1")
                         .contentType(MediaType.APPLICATION_JSON))

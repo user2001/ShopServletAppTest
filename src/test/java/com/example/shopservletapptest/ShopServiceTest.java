@@ -59,16 +59,15 @@ public class ShopServiceTest {
     public void getShopTest() {
         Shop shop = new Shop("Dolyna", "Prospekt Svobody", "Dynastia", 50, true);
         shop.setId(1L);
-        when(shopRepository.existsById(shop.getId())).thenReturn(true);
         when(shopRepository.findById(1L)).thenReturn(
                 Optional.of(shop));
 
-        Shop theShop = shopService.getShop(1L);
-        assertEquals("Dolyna", theShop.getCity());
-        assertEquals("Prospekt Svobody", theShop.getStreet());
-        assertEquals("Dynastia", theShop.getShopName());
-        assertEquals(50, theShop.getCountOfWorkers());
-        assertEquals(true, theShop.isWebsite());
+        Optional<Shop> theShop = shopService.getShop(1L);
+        Assertions.assertEquals("Dolyna", theShop.get().getCity());
+        Assertions.assertEquals("Prospekt Svobody", theShop.get().getStreet());
+        Assertions.assertEquals("Dynastia", theShop.get().getShopName());
+        Assertions.assertEquals(50, theShop.get().getCountOfWorkers());
+        Assertions.assertTrue(theShop.get().isWebsite());
     }
 
     @Test

@@ -16,8 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.shopservletapptest.TestShop.shopForTest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -31,14 +31,13 @@ public class ShopServiceTest {
     @InjectMocks
     private ShopServiceImpl shopService;
 
-
     @Test
     public void addShopTest() {
-        Shop theShop = new Shop("Odessa", "Chuprynky", "Arkadia", 1000, true);
-        when(shopRepository.save(any(Shop.class))).thenReturn(theShop);
 
-        Shop savedShop = shopService.addShop(theShop);
-        assertThat(savedShop.getShopName()).isSameAs(theShop.getShopName());
+        when(shopRepository.save(any(Shop.class))).thenReturn(shopForTest());
+
+        Shop actualShop = shopService.addShop(shopForTest());
+        assertThat(actualShop.getShopName()).isSameAs(shopForTest().getShopName());
     }
 
     @Test
@@ -46,51 +45,52 @@ public class ShopServiceTest {
         Shop shop1 = new Shop("Dolyna", "Prospekt Svobody", "Dynastia", 50, true);
         Shop shop2 = new Shop("Lviv", "Lukasha", "Politech", 5000, true);
         Shop shop3 = new Shop("Stryj", "Drohobycka", "Kavoman", 20, false);
-        List<Shop> shopList = new ArrayList<>(Arrays.asList(shop1, shop2, shop3));
+        List<Shop> expectedList = new ArrayList<>(Arrays.asList(shop1, shop2, shop3));
 
-        when(shopRepository.findAll()).thenReturn(shopList);
+        when(shopRepository.findAll()).thenReturn(expectedList);
 
-        List<Shop> list = shopService.getShops();
-        Assertions.assertEquals(3, list.size());
+        List<Shop> actualList = shopService.getShops();
+        Assertions.assertEquals(3, actualList.size());
         verify(shopRepository, times(1)).findAll();
     }
 
     @Test
     public void getShopTest() {
-        Shop shop = new Shop("Dolyna", "Prospekt Svobody", "Dynastia", 50, true);
-        shop.setId(1L);
-        when(shopRepository.findById(1L)).thenReturn(
-                Optional.of(shop));
 
-        Optional<Shop> theShop = shopService.getShop(1L);
-        Assertions.assertEquals("Dolyna", theShop.get().getCity());
-        Assertions.assertEquals("Prospekt Svobody", theShop.get().getStreet());
-        Assertions.assertEquals("Dynastia", theShop.get().getShopName());
-        Assertions.assertEquals(50, theShop.get().getCountOfWorkers());
-        Assertions.assertTrue(theShop.get().isWebsite());
+        when(shopRepository.findById(1L)).thenReturn(Optional.of(shopForTest()));
+
+        Optional<Shop> actualShop = shopService.getShop(1L);
+        Assertions.assertEquals(shopForTest().getCity(), actualShop.get().getCity());
+        Assertions.assertEquals(shopForTest().getStreet(), actualShop.get().getStreet());
+        Assertions.assertEquals(shopForTest().getShopName(), actualShop.get().getShopName());
+        Assertions.assertEquals(shopForTest().getCountOfWorkers(), actualShop.get().getCountOfWorkers());
+        Assertions.assertTrue(actualShop.get().isWebsite());
     }
 
     @Test
     public void updateShopTest() {
-        Shop shop = new Shop("Dolyna", "Prospekt Svobody",
-                "Dynastia", 50, true);
+
         Long shopId = 5L;
-        Shop temp = new Shop();
+
+        Shop expectedShop = new Shop();
+
         when(shopRepository.existsById(shopId)).thenReturn(true);
-        when(shopRepository.findById(shopId)).thenReturn(Optional.of(temp));
-        temp = shopService.updateShop(shop, shopId);
-        assertThat(temp.getShopName()).isSameAs(shop.getShopName());
+        when(shopRepository.findById(shopId)).thenReturn(Optional.of(expectedShop));
+
+        expectedShop = shopService.updateShop(shopForTest(), shopId);
+
+        assertThat(expectedShop.getShopName()).isSameAs(shopForTest().getShopName());
         verify(shopRepository).save(any(Shop.class));
 
     }
 
     @Test
     public void deleteShopTest() {
-        Shop shop = new Shop("Dolyna", "Prospekt Svobody", "Dynastia", 50, true);
-        shop.setId(1L);
-        when(shopRepository.existsById(shop.getId())).thenReturn(true);
-        shopService.deleteShop(shop.getId());
-        verify(shopRepository).deleteById(shop.getId());
+
+        when(shopRepository.existsById(shopForTest().getId())).thenReturn(true);
+
+        shopService.deleteShop(shopForTest().getId());
+        verify(shopRepository).deleteById(shopForTest().getId());
 
     }
 
@@ -99,11 +99,11 @@ public class ShopServiceTest {
     void should_throw_exception_when_user_doesnt_exist() {
         Shop shop = new Shop();
         shop.setId(1L);
+
         assertThrows(ShopNotFoundException.class, () -> shopService.isFound(3L));
         assertThrows(ShopNotFoundException.class, () -> shopService.isFound(null));
         assertThrows(ShopNotFoundException.class, () -> shopService.isFound(-1L));
 
     }
-
 
 }

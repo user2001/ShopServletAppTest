@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.shopservletapptest.TestShop.shopForTest;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -51,11 +52,11 @@ public class ShopControllerTest {
         Shop shop2 = new Shop("Lviv", "Lukasha", "Politech", 5000, true);
         shop2.setId(2L);
 
-        List<Shop> shopList = new ArrayList<>(Arrays.asList(shop1, shop2));
+        List<Shop> expectedShopList = new ArrayList<>(Arrays.asList(shop1, shop2));
 
-        when(shopServiceMock.getShops()).thenReturn(shopList);
+        when(shopServiceMock.getShops()).thenReturn(expectedShopList);
 
-        assertIterableEquals(shopList, shopServiceMock.getShops());
+        assertIterableEquals(expectedShopList, shopServiceMock.getShops());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/shops"))
                 .andExpect(status().isOk())
@@ -66,33 +67,28 @@ public class ShopControllerTest {
     @Test
     void addShopTest() throws Exception {
 
-        Shop newShop = new Shop("Dolyna", "Prospekt Svobody", "Dynastia", 50, true);
-        newShop.setId(1L);
-        when(shopServiceMock.addShop(newShop)).thenReturn(newShop);
+        when(shopServiceMock.addShop(shopForTest())).thenReturn(shopForTest());
 
         MockHttpServletRequestBuilder mockRequest = post("/shops")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(this.mapper.writeValueAsString(newShop));
+                .content(this.mapper.writeValueAsString(shopForTest()));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.city", Matchers.is("Dolyna")));
+                .andExpect(jsonPath("$.city", Matchers.is(shopForTest().getCity())));
 
     }
 
     @Test
     void getShopByIdTest() throws Exception {
 
-        Shop shop2 = new Shop("Lviv", "Lukasha", "Politech", 5000, true);
-        shop2.setId(2L);
+        when(shopServiceMock.getShop(shopForTest().getId())).thenReturn(Optional.of(shopForTest()));
 
-        when(shopServiceMock.getShop(shop2.getId())).thenReturn(Optional.of(shop2));
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/shops/2")
+        mockMvc.perform(MockMvcRequestBuilders.get("/shops/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.city", Matchers.is("Lviv")));
+                .andExpect(jsonPath("$.city", Matchers.is(shopForTest().getCity())));
 
 
     }
@@ -100,10 +96,7 @@ public class ShopControllerTest {
     @Test
     void deleteByIdTest() throws Exception {
 
-        Shop newShop = new Shop("Dolyna", "Prospekt Svobody", "Dynastia", 50, true);
-        newShop.setId(1L);
-
-        when(shopServiceMock.getShop(newShop.getId())).thenReturn(Optional.of(newShop));
+        when(shopServiceMock.getShop(shopForTest().getId())).thenReturn(Optional.of(shopForTest()));
 
         mockMvc.perform(delete("/shops/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -116,15 +109,14 @@ public class ShopControllerTest {
     void updateByIdTest() throws Exception {
         Shop newShop = new Shop();
         newShop.setId(1L);
-        Shop updated = new Shop("Lviv", "Stryjska", "Kolosok", 47, true);
-        updated.setId(newShop.getId());
+        shopForTest().setId(newShop.getId());
 
-        when(shopServiceMock.updateShop(updated, newShop.getId())).thenReturn(updated);
+        when(shopServiceMock.updateShop(shopForTest(), newShop.getId())).thenReturn(shopForTest());
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/shops/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(this.mapper.writeValueAsString(updated));
+                .content(this.mapper.writeValueAsString(shopForTest()));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isOk())

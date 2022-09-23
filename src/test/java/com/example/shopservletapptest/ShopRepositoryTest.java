@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.util.Arrays;
 import java.util.List;
 
+import static com.example.shopservletapptest.TestShop.shopForTest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
@@ -29,8 +29,7 @@ public class ShopRepositoryTest {
 
     @BeforeEach
     public void init() {
-        List<Shop> shopList = Arrays.asList(
-                new Shop("Lviv", "Kozelnytska", "UCU", 300, true));
+        List<Shop> shopList = List.of(shopForTest());
         shopRepository.saveAll(shopList);
         System.out.println(shopList);
     }
@@ -49,8 +48,8 @@ public class ShopRepositoryTest {
     }
 
     @Test
-    public void findAllTest(){
-        List<Shop> shopList=shopRepository.findAll();
+    public void findAllTest() {
+        List<Shop> shopList = shopRepository.findAll();
         assertThat(shopList.size()).isGreaterThanOrEqualTo(1);
     }
 
